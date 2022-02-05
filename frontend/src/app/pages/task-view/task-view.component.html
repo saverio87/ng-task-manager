@@ -1,0 +1,130 @@
+<div class="centered-content">
+  <div class="task-manager-container">
+    <div class="sidebar has-background-white">
+      <h1 class="title has-text-primary">Lists</h1>
+
+      <!-- RouterLinkActive is a built-in Angular directive -->
+      <ul class="list-menu" style="flex-grow: 1">
+        <a
+          
+          class="list-menu-item"
+          *ngFor="let list of lists"
+          [routerLink]="['/lists', list._id]"
+          routerLinkActive="is-active"
+        >
+          <p>
+            {{
+              list.title.length > 20
+                ? list.title.slice(0, 20) + "..."
+                : list.title
+            }}
+          </p>
+        </a>
+      </ul>
+      <button
+        routerLink="/new-list"
+        class="button is-primary has-text-white has-text-weight-bold"
+      >
+        + New List
+      </button>
+    </div>
+    <div class="tasks-list-container has-background-light">
+      <div *ngIf="tasks">
+        <div class="top-bar">
+          <h1 class="title has-text-primary">
+            Tasks
+            <span style="font-size: 1rem" *ngIf="this.activeListTitle">
+              in '{{ activeListTitle }}'
+            </span>
+          </h1>
+          <!-- dropdown -->
+          <div style="margin-bottom: 2rem;" class="dropdown is-hoverable is-right">
+            <div class="dropdown-trigger">
+              <button
+                class="button"
+                aria-haspopup="true"
+                aria-controls="dropdown-menu4"
+              >
+              <span class="icon is-small"><fa-icon [icon]="faCog"></fa-icon></span>
+                
+              </button>
+            </div>
+            <div class="dropdown-menu" id="dropdown-menu4" role="menu">
+              <div class="dropdown-content">
+                <a
+                  class="dropdown-item"
+                  [routerLink]="['/edit-list', activeListId]"
+                >
+                  Edit
+                </a>
+                <a
+                  class="dropdown-item has-text-danger"
+                  (click)="onDeleteListClick()"
+                >
+                  Delete
+                </a>
+              </div>
+            </div>
+          </div>
+          <!-- end of dropdown -->
+        </div>
+
+        <div *ngIf="activeListId">
+          <div
+            class="task"
+            *ngFor="let task of tasks"
+            [ngClass]="{ completed: task.completed }"
+            
+          >
+            <div class="task-text" (click)="onTaskClick(task)">
+              <p>{{ task.title }}</p>
+            <p>
+              <small>{{
+                task.created ? 
+                task.created.toString()
+                 : "No creation date"
+              }}</small>
+            </p>
+            </div>
+            <div class="task-buttons">
+              <button class="button" style="margin-right: 2px;" [routerLink]="['/lists', activeListId, 'tasks', task._id]">
+                <fa-icon [icon]="faEdit" 
+                ></fa-icon>
+
+              </button>
+              <button
+              (click)="onDeleteTaskClick(task._id)"
+              class="button is-danger" >
+                <fa-icon [icon]="faTrash"></fa-icon>
+
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Only render the button if activeListId has been
+        assigned a value -->
+        <button
+          class="button circle-add-button is-primary has-text-white"
+          *ngIf="activeListId"
+          [routerLink]="['/lists', activeListId, 'tasks']"
+        >
+      <fa-icon [icon]="faPlus"></fa-icon>
+        </button>
+      </div>
+
+      <div *ngIf="!lists" class="centered-content">
+        <h1 class="empty-state">You haven't created any lists</h1>
+      </div>
+
+      <div *ngIf="activeListId && tasks.length === 0" class="centered-content">
+        <h1 class="empty-state">There are no tasks here!</h1>
+      </div>
+      <!--  -->
+
+      <div *ngIf="!activeListId && lists" class="centered-content">
+        <h1 class="empty-state">Select a list from the sidebar</h1>
+      </div>
+    </div>
+  </div>
+</div>

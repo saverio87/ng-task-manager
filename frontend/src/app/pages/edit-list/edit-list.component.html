@@ -1,0 +1,20 @@
+<div class="centered-content">
+  <div class="modal-box">
+    <h1 class="title is-green">Edit list</h1>
+    <input
+      #listTitleInput
+      class="input is-primary is-medium"
+      type="text"
+      placeholder="Insert list name"
+    />
+    <div style="margin-top: 2rem" class="buttons is-right">
+      <button class="button is-medium" routerLink="/">Go back</button>
+      <button
+        class="button has-text-weight-bold has-text-white is-primary is-medium"
+        (click)="updateList(listTitleInput.value)"
+      >
+        Edit
+      </button>
+    </div>
+  </div>
+</div>
